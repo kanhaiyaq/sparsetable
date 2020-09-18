@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+const int k=16;
+const int N=1e5;
+long long look[N][k+1];
+void build(int a[],int n)
+{
+	for(int i=0;i<n;i++)
+	{
+		look[i][0]=a[i];
+	}
+	for(int j=1;j<=k;j++)
+	{
+		for(int i=0;i<=n-(1<<j);i++)
+		{
+      look[i][j]=look[i][j-1]+look[i+(1<<(j-1))][j-1];
+		}
+	}
+}
+long long query(int L,int R)
+{
+	long long answer=0;
+	for(int j=k;j>=0;j--)
+	{
+		if(L+(1<<j)-1<=R)
+		{
+			answer=answer+look[L][j];
+			L+=1<<j;
+		}
+	}
+	return answer;
+}
+int main()
+{int a[]={3,7,2,5,8,9};
+int n=sizeof(a)/sizeof(a[0]);
+build(a,n);
+cout<<query(0,5);
+}
