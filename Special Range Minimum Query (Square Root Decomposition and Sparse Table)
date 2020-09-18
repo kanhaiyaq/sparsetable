@@ -1,0 +1,47 @@
+#include<iostream>
+using namespace std;
+#define MAX 500
+int look[MAX][MAX];
+struct query
+{
+	int L,R;
+};
+void preprocess(int a[],int n)
+{
+	for(int i=0;i<n;i++)
+	{
+		look[i][i]=i;
+	}
+	for(int i=0;i<n;i++)
+	{
+		for(int j=i+1;j<n;j++)
+		{
+			if(a[look[i][j-1]]<a[j])
+			{
+				look[i][j]=look[i][j-1];
+			}
+			else
+			{
+				look[i][j]=j;
+			}	
+		}
+	}
+}
+void RMQ(int a[],int n,query q[],int m)
+{
+	preprocess(a,n);
+	for(int i=0;i<m;i++)
+	{
+		int L=q[i].L,R=q[i].R;
+		cout<<"MINIMUM oF ["<<L<<","<<R<<"]"<<a[look[L][R]]<<endl;
+	}
+}
+int main()
+{
+	int a[]={7,2,3,0,5,10,3,12,18};
+	int n=sizeof(a)/sizeof(a[0]);
+	query q[]={{0,4},{4,7},{7,8}};
+	int m=sizeof(q)/sizeof(q[0]);
+	RMQ(a,n,q,m);
+	return 0;
+}
